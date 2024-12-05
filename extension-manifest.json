@@ -1,0 +1,20 @@
+{
+  "name": "Add to Workfront",
+  "id": "add-to-workfront",
+  "description": "Provides the ability for authors to quickly link assets to existing workfront projects",
+  "version": "0.0.1",
+  "detailsSidePanels": [
+    {
+      "tooltip": "Link with Workfront Project",
+      "title": "Quick link",
+      "icon": "LinkPage",
+      "id": "link-with-workfront",
+      "componentName": "PanelLinkWithWorkfront"
+    }
+  ],
+  "runtimeActions": [
+    {
+      "name": "generic"
+    }
+  ]
+}
