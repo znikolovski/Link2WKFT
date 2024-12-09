@@ -50,6 +50,7 @@ async function main (params) {
     const apiEndpoint = params.WORKFRONT_URL+"/attask/api/v19.0/extdoc?&action=linkExternalDocumentObjects";
 
     const { hostname } = new URL(params.AEM_AUTHOR_HOST);
+    const documentProviderId = params.DOCUMENT_PROVIDER_ID
 
     // replace this with the api you want to access
     const objectCode = "urn:workfront:documents:aem:"+hostname+":" + encodeURIComponent(imageID);
@@ -69,7 +70,7 @@ async function main (params) {
         "refObjCode": 'PROJ',
         "refObjID": refObjId,
         "providerType": "AEM",
-        "documentProviderID": "66020ca100113634b069d52f629515dc",
+        "documentProviderID": documentProviderId,
         "objects": JSON.stringify(objects)
       })
     });

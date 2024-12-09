@@ -77,10 +77,8 @@ export default function PanelLinkWithWorkfront() {
     }
 
     if (!configuration) {
-      setConfiguration( { WORKFRONT_INSTANCE_URL: process.env['WORKFRONT_INSTANCE_URL'] } );
+      setConfiguration( { WORKFRONT_INSTANCE_URL: process.env['WORKFRONT_INSTANCE_URL'], DOCUMENT_PROVIDER_ID: process.env['DOCUMENT_PROVIDER_ID'] } );
     }
-
-    console.log(IMSInfo);
   }, [guestConnection]);
 
   function displayToast(variant, message) {
@@ -96,7 +94,7 @@ export default function PanelLinkWithWorkfront() {
     const assetPath = assetInfo.path.split('/').pop();
     assetPath.substr(0,assetPath.lastIndexOf('.')),assetPath.substr(assetPath.lastIndexOf('.')+1,assetPath.length)
 
-    let params =  { fileName: assetPath.substr(0,assetPath.lastIndexOf('.')), ext: assetPath.substr(assetPath.lastIndexOf('.')+1,assetPath.length), imageID: assetInfo.id, refObjId: wfProjects[wfProjectId-1].ID, AEM_AUTHOR_HOST: aemHost, WORKFRONT_URL: configuration.WORKFRONT_INSTANCE_URL}
+    let params =  { fileName: assetPath.substr(0,assetPath.lastIndexOf('.')), ext: assetPath.substr(assetPath.lastIndexOf('.')+1,assetPath.length), imageID: assetInfo.id, refObjId: wfProjects[wfProjectId-1].ID, AEM_AUTHOR_HOST: aemHost, WORKFRONT_URL: configuration.WORKFRONT_INSTANCE_URL, DOCUMENT_PROVIDER_ID: configuration.DOCUMENT_PROVIDER_ID}
 
     try {
       const wfProjectName = wfProjects[wfProjectId-1].name;
