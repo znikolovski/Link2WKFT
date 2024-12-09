@@ -4,7 +4,10 @@ AEM Assets UI Extension that provides the ability for authors to quickly link as
 
 ## Setup
 
-- Once you've connected this repo with an Adobe I/O project you can optionally provide a WORKFRONT_INSTANCE_URL value in the .env file to be used as a default value. This is also required for local testing.
+- Once you've connected this repo with an Adobe I/O project you can optionally provide a WORKFRONT_INSTANCE_URL and DOCUMENT_PROVIDER_ID values in the .env file to be used as a default value. This is also required for local testing.
+- Once the extension is published the configuration should include two variables:
+  - WORKFRONT_INSTANCE_URL - the url of the workfront instance that the extension will connect to
+  - DOCUMENT_PROVIDER_ID - the ID of the AEM document provider configured in the workfront instance
 
 ## Local Dev
 
