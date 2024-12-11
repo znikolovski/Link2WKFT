@@ -68,7 +68,7 @@ export default function PanelLinkWithWorkfront() {
 
       try {
         let params =  { WORKFRONT_URL: configuration.WORKFRONT_INSTANCE_URL}
-        const actionResponse = await actionWebInvoke(actions["aem-assets-details-1/generic"], headers)
+        const actionResponse = await actionWebInvoke(actions["aem-assets-details-1/generic"], headers, params)
         const options = [];
         for (let index = 0; index < actionResponse.data.length; index++) {
           const element = actionResponse.data[index];
