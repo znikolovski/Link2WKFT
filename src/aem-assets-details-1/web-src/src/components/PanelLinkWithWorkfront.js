@@ -8,7 +8,6 @@ import {
   Flex,
   Provider,
   defaultTheme,
-  Link,
   Text,
   ButtonGroup,
   Button,
@@ -18,7 +17,6 @@ import {
 } from '@adobe/react-spectrum';
 
 import { extensionId } from './Constants';
-import fetch from 'node-fetch';
 import actionWebInvoke from '../utils';
 
 import actions from '../config.json'
@@ -30,7 +28,6 @@ export default function PanelLinkWithWorkfront() {
   const [configuration, setConfiguration] = useState();
   const [IMSInfo, setIMSInfo] = useState();
   const [assetInfo, setAssetInfo] = useState();
-  const [apiKey, setApiKey] = useState();
   const [wfProjects, setWFProjects] = useState([]);
   const [wfProjectId, setWFProjectId]= useState();
   const [wfProjectLoadingState, setWFProjectLoadingState] = useState(true);
@@ -67,7 +64,8 @@ export default function PanelLinkWithWorkfront() {
       headers['x-gw-ims-org-id'] = IMSInfo.imsOrg;
 
       try {
-        let params =  { WORKFRONT_URL: configuration.WORKFRONT_INSTANCE_URL}
+        //Due to async process we have to at this point re-fetch the workfront URL from the .env file fallback
+        const params =  { WORKFRONT_URL: configuration ? configuration.WORKFRONT_INSTANCE_URL : process.env['WORKFRONT_INSTANCE_URL']}
         const actionResponse = await actionWebInvoke(actions["aem-assets-details-1/generic"], headers, params)
         const options = [];
         for (let index = 0; index < actionResponse.data.length; index++) {
@@ -76,7 +74,6 @@ export default function PanelLinkWithWorkfront() {
           options.push(element)
         }
         setWFProjects(options)
-        console.log(options)
         setWFProjectLoadingState(false);
       } catch (e) {
         console.log(e)
@@ -97,7 +94,7 @@ export default function PanelLinkWithWorkfront() {
     const assetPath = assetInfo.path.split('/').pop();
     assetPath.substr(0,assetPath.lastIndexOf('.')),assetPath.substr(assetPath.lastIndexOf('.')+1,assetPath.length)
 
-    let params =  { fileName: assetPath.substr(0,assetPath.lastIndexOf('.')), ext: assetPath.substr(assetPath.lastIndexOf('.')+1,assetPath.length), imageID: assetInfo.id, refObjId: wfProjects[wfProjectId-1].ID, AEM_AUTHOR_HOST: aemHost, WORKFRONT_URL: configuration.WORKFRONT_INSTANCE_URL, DOCUMENT_PROVIDER_ID: configuration.DOCUMENT_PROVIDER_ID}
+    const params =  { fileName: assetPath.substr(0,assetPath.lastIndexOf('.')), ext: assetPath.substr(assetPath.lastIndexOf('.')+1,assetPath.length), imageID: assetInfo.id, refObjId: wfProjects[wfProjectId-1].ID, AEM_AUTHOR_HOST: aemHost, WORKFRONT_URL: configuration.WORKFRONT_INSTANCE_URL, DOCUMENT_PROVIDER_ID: configuration.DOCUMENT_PROVIDER_ID}
 
     try {
       const wfProjectName = wfProjects[wfProjectId-1].name;
