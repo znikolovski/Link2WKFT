@@ -43,7 +43,7 @@ async function main (params) {
     const token = getBearerToken(params)
 
     // replace this with the api you want to access
-    const apiEndpoint = `https://ags050-19032401.testdrive.workfront.com/attask/api/v18.0/PROJ/search?projectUserIDs=$$USER.ID`
+    const apiEndpoint = `${params.WORKFRONT_URL}/attask/api/v18.0/PROJ/search?projectUserIDs=$$USER.ID`
     // fetch content from external api endpoint
     const res = await fetch(apiEndpoint, {
       headers: {

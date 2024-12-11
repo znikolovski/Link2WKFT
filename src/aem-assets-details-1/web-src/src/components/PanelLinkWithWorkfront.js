@@ -48,11 +48,26 @@ export default function PanelLinkWithWorkfront() {
 
       const { colorScheme } = await guestConnection.host.theme.getThemeInfo();
 
+      setColorScheme(colorScheme);
+    })()
+  }, []);
+
+  useEffect(() => {
+    if (!guestConnection) {
+      return;
+    }
+
+    if (!configuration) {
+      setConfiguration( { WORKFRONT_INSTANCE_URL: process.env['WORKFRONT_INSTANCE_URL'], DOCUMENT_PROVIDER_ID: process.env['DOCUMENT_PROVIDER_ID'] } );
+    }
+
+    (async () => {
       const headers = {};
-      headers.authorization = `Bearer ${auth.accessToken}`;
-      headers['x-gw-ims-org-id'] = auth.imsOrg;
+      headers.authorization = `Bearer ${IMSInfo.accessToken}`;
+      headers['x-gw-ims-org-id'] = IMSInfo.imsOrg;
 
       try {
+        let params =  { WORKFRONT_URL: configuration.WORKFRONT_INSTANCE_URL}
         const actionResponse = await actionWebInvoke(actions["aem-assets-details-1/generic"], headers)
         const options = [];
         for (let index = 0; index < actionResponse.data.length; index++) {
@@ -66,19 +81,7 @@ export default function PanelLinkWithWorkfront() {
       } catch (e) {
         console.log(e)
       }
-
-      setColorScheme(colorScheme);
     })()
-  }, []);
-
-  useEffect(() => {
-    if (!guestConnection) {
-      return;
-    }
-
-    if (!configuration) {
-      setConfiguration( { WORKFRONT_INSTANCE_URL: process.env['WORKFRONT_INSTANCE_URL'], DOCUMENT_PROVIDER_ID: process.env['DOCUMENT_PROVIDER_ID'] } );
-    }
   }, [guestConnection]);
 
   function displayToast(variant, message) {
@@ -99,18 +102,12 @@ export default function PanelLinkWithWorkfront() {
     try {
       const wfProjectName = wfProjects[wfProjectId-1].name;
       const paramsMetadata =  { wfProjectName: wfProjectName, assetPath: assetInfo.path, AEM_AUTHOR_HOST: aemHost}
-      const metadataActionResponse = await actionWebInvoke(actions["aem-assets-details-1/metadata"], headers, paramsMetadata);
-      const actionResponse = await actionWebInvoke(actions["aem-assets-details-1/link"], headers, params);
+      await actionWebInvoke(actions["aem-assets-details-1/metadata"], headers, paramsMetadata);
+      await actionWebInvoke(actions["aem-assets-details-1/link"], headers, params);
       
-      const variant = 'positive';
-      const message = 'Successfully linked asset'
-      guestConnection.host.toast.display({ variant, message });
-      
+      displayToast('positive', 'Successfully linked asset')
     } catch (e) {
-      const variant = 'negative';
-      const message = 'Error linking asset';
-      guestConnection.host.toast.display({ variant, message });
-      console.log(e)
+      displayToast('negative', 'Error linking asset')
     }
   }
 
